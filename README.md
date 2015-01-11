@@ -33,8 +33,6 @@ To run tests, simply run `npm test`.
 
 ## License
 
-(The MIT License)
-
 The MIT License (MIT)
 
 Copyright (c) 2015 Salehen Shovon Rahman
