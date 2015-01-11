@@ -20,7 +20,7 @@ describe('Encoder', function () {
       assert(!Encoder.isPNG(jpg));
     }
   );
-  xit(
+  it(
     'should accept either a PNG or JPG image stream and convert it to BPG',
     function (done) {
       var writeStream = fs.createWriteStream(path.join(__dirname, 'Lenna.bpg'));
