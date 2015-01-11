@@ -1,4 +1,21 @@
 {
+  "name": "bpg-stream",
+  "version": "0.0.1",
+  "description": "A stream-based JPG/PNG to BPG transcoder",
+  "keywords": [
+    "bpg"
+  ],
+  "homepage": "https://github.com/shovon/bpg-stream",
+  "bugs": "https://github.com/shovon/bpg-stream/issues",
+  "license": "MIT",
+  "author": {
+    "name": "Salehen Shovon Rahman",
+    "email": "salehen.rahman@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shovon/bpg-stream.git"
+  },
   "scripts": {
     "test": "mocha -t 10000"
   },
