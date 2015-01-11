@@ -28,12 +28,16 @@ describe('Encoder', function () {
     function () {
       expect(Encoder.getImageFormatCode(jpg)).to.be('jpg');
       expect(Encoder.getImageFormatCode(png)).to.be('png');
+      var thrown = false;
       try {
         Encoder.getImageFormatCode(new Buffer([0, 0, 0, 0, 0, 0]));
-        throw new Error('Should have thrown an error');
-      } catch (e) {}
+      } catch (e) {
+        thrown = true;
+      }
+      assert(thrown);
     }
   );
+
   it(
     'should accept either a PNG or JPG image stream and convert it to BPG',
     function (done) {
