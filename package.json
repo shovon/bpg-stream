@@ -1,6 +1,6 @@
 {
   "name": "bpg-stream",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A stream-based JPG/PNG to BPG transcoder",
   "keywords": [
     "bpg"
