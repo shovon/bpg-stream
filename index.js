@@ -12,6 +12,7 @@ var debugConstructor = dbg('bpgencoder:constructor');
 var debugWriter = dbg('bpgencoder:writer');
 var debugReader = dbg('bpgencoder:reader');
 
+// Byte values that *all* JPG and PNG images start with, respectively.
 var JPG_HEX = 'ffd8';
 var PNG_HEX = '89504e47';
 
@@ -63,7 +64,8 @@ function Encoder() {
   this.reading = false;
 
   /*
-   * The path where we will be temporarily storing our buffer.
+   * The path where we will be temporarily storing our buffer. Note: this will
+   * **not** have a file extension.
    */
   this.filepath = os.tmpdir() + randomAsciiString(16);
 
@@ -75,7 +77,7 @@ function Encoder() {
    */
   this._writeStream = fs
     .createWriteStream(this.filepath);
-  this._writeStream.on('finish', function () {
+  this.on('_source-finished', function () {
     debugConstructor('Done writing input stream to %s', this.filepath);
     this.copied = true;
   }.bind(this));
@@ -86,9 +88,16 @@ function Encoder() {
       if (!ended) {
         debugConstructor('The piped stream has ended');
         ended = true;
-        this._writeStream.end();
+        this.copied = true;
+        this.emit('_source-finished');
       }
     }.bind(this);
+    src.on('error', function (error) {
+      debugConstructor('An error occurred %s', error.message);
+      this.emit('error', error);
+    }.bind(this));
+
+    // These might be called before the source stream has finished writing.
     src.on('end', onEnd);
     src.on('close', onEnd);
   }.bind(this));
@@ -148,7 +157,7 @@ Encoder.prototype._read = function () {
 
         tempReadStream.on('error', function (e) {
           if (stoppedReading) { return; }
-          debugReader('An error occurred while reading from disk');
+          debugReader('An error occurred while reading from disk', e.message);
           this.emit('error', e);
         }.bind(this));
 
@@ -176,11 +185,13 @@ Encoder.prototype._read = function () {
           debugReader('The encoder has exitted with code %d', code);
           fs.unlink(filepath);
           if (code) {
+            var error = new Error(
+              'The BPG encoder exitted with a non-zero error code ' + code
+                + '.'
+            );
+            debugReader('An error occurred: %s', error.message);
             return callback(
-              new Error(
-                'The BPG encoder exitted with a non-zero error code ' + code
-                  + '.'
-              )
+              error
             );
           }
           callback(null, bpgpath);
@@ -216,7 +227,7 @@ Encoder.prototype._read = function () {
   }.bind(this);
 
   if (!this.copied) {
-    this._writeStream.on('finish', function () {
+    this.on('_source-finished', function () {
       beginReadable();
     }.bind(this));
     return;
