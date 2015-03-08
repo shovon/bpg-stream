@@ -1,6 +1,6 @@
 {
   "name": "bpg-stream",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A stream-based JPG/PNG to BPG transcoder",
   "keywords": [
     "bpg"
@@ -10,7 +10,7 @@
   "license": "MIT",
   "author": {
     "name": "Salehen Shovon Rahman",
-    "email": "salehen.rahman@gmail.com"
+    "email": "sal@linux.com"
   },
   "repository": {
     "type": "git",
